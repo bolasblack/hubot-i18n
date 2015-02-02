@@ -1,0 +1,28 @@
+{
+  "name": "hubot-i18n",
+  "description": "A hubot script to add i18n support.",
+  "version": "0.0.1",
+  "author": "c4605 <bolasblack@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "hubot",
+    "hubot-scripts",
+    "i18n"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/bolasblack/hubot-i18n.git"
+  },
+  "bugs": {
+    "url": "https://github.com/bolasblack/hubot-i18n/issues"
+  },
+  "dependencies": {
+    "coffee-script": "~1.6",
+    "lodash": "^3.0.1"
+  },
+  "devDependencies": {},
+  "main": "src/i18n.coffee",
+  "scripts": {
+    "test": "echo null"
+  }
+}
