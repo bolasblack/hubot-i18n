@@ -51,13 +51,13 @@ class I18nModule
   identity: _.identity
 
   t: (key, options) ->
-    return key unless template = @get key
-    result = if _(template).isRegExp()
-      template
-    else if _(template.match).isRegExp()
-      template.match
+    return key unless config = @get key
+    result = if _(config).isRegExp()
+      config
+    else if _(config.match).isRegExp()
+      config.match
     else
-      _.template(template) options
+      _.template(config) options
     result._i18n = true
     result
 
