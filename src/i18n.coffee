@@ -72,11 +72,10 @@ wrapRobotMethod = (robot) ->
   Robot = robot.constructor
   wrapMethod = (originMethod) ->
     (regexp, callback) ->
-      regexpNotFromI18n = not regexp._i18n
+      pluginNotUsingI18n = not regexp._i18n
       realRegexp = i18n.t regexp
-      if regexpNotFromI18n and realRegexp
-        regexp = realRegexp
-        callback = i18n.c regexp, callback
+      if pluginNotUsingI18n and realRegexp
+        [regexp, callback] = [realRegexp, i18n.c regexp, callback]
       originMethod.call this, regexp, callback
 
   Robot::respond = wrapMethod Robot::respond

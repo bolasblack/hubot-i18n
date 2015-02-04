@@ -48,7 +48,7 @@ module.exports = (robot) ->
     'zh-CN':
       # key is RegExp.source
       'help\\s*(.*)?$':
-        match: /(关于)?\s*(.*)?\s*(的)?命令$/i
+        match: /(关于)?\s*([^\s关于的]+)?\s*(的)?命令$/i
         transform: (msg) ->
           match = msg.match
           msg.match = [match[0], match[2]]
