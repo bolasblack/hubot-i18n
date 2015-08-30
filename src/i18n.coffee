@@ -11,11 +11,12 @@
 #   # You can load i18n config serverl times
 #   i18n.load(
 #     "language-tag":
+#       # for normal use case
 #       message: "${ robot_name } support i18n now"
-#       # simple way
-#       respond: /.*i18n\s+awesome.*/i
-#       # complex way
-#       respond:
+#
+#       # for listener
+#       respond: /.*i18n\s+awesome.*/i  # simple way
+#       respond:                        # complex way
 #         match: /.*i18n\s+awesome.*/i
 #         # You can modify `msg` before pass in Listener
 #         transform: (msg) ->
@@ -23,10 +24,12 @@
 #           msg
 #   )
 #
-#   # Use it
-#   robot.respond i18n.t('respond'), i18n.c 'respond', (msg) ->
+#   # use i18n.t to translate content
+#   # use i18n.c make `transform` take effect
+#   robot.respond i18n.t('respond'), i18n.c('respond', (msg) ->
 #     msg.send i18n.t('message', robot_name: msg.match[1])
 #     #=> R2-D2 support i18n now
+#   )
 #
 # Author:
 #   c4605 <bolasblack@gmail.com>
@@ -50,7 +53,7 @@ class I18nModule
 
   identity: _.identity
 
-  t: (key, options) ->
+  translate: (key, options) ->
     return key unless config = @get key
     result = if _(config).isRegExp()
       config
@@ -61,11 +64,14 @@ class I18nModule
     result._i18n = true
     result
 
-  c: (key, callback) ->
+  preprocessCallback: (key, callback) ->
     return callback unless config = @get key
     transform = config.transform or @identity
     (msg) ->
       callback.call this, transform(msg)
+
+I18nModule::c = I18nModule::preprocessCallback
+I18nModule::t = I18nModule::translate
 
 wrapRobotMethod = (robot) ->
   i18n = robot.i18n 'patch'
