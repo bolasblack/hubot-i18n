@@ -24,6 +24,9 @@
 #           msg
 #   )
 #
+#   # use i18n.m can match all language
+#   robot.listen i18n.m('respond'), (resp) ->
+#
 #   # use i18n.t to translate content
 #   # use i18n.c make `transform` take effect
 #   robot.respond i18n.t('respond'), i18n.c('respond', (msg) ->
@@ -64,6 +67,19 @@ class I18nModule
     result._i18n = true
     result
 
+  matcher: (key) ->
+    (message) =>
+      lastValue = null
+      _.find @langs, (locale, lang) ->
+        matcher = locale[key]
+        lastValue = if _(matcher).isRegExp()
+          message.match matcher
+        else if _(matcher.match).isRegExp()
+          message.match matcher.match
+        else
+          matcher is message
+      lastValue
+
   preprocessCallback: (key, callback) ->
     return callback unless config = @get key
     transform = config.transform or @identity
@@ -72,6 +88,7 @@ class I18nModule
 
 I18nModule::c = I18nModule::preprocessCallback
 I18nModule::t = I18nModule::translate
+I18nModule::m = I18nModule::matcher
 
 wrapRobotMethod = (robot) ->
   i18n = robot.i18n 'patch'
